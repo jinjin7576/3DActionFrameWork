@@ -5,11 +5,13 @@ public class Managers : MonoBehaviour
     static Managers s_instance;    
     ResourceManager _resource = new ResourceManager();
     InputManager _input = new InputManager();
+    UIManager _ui = new UIManager();
 
     public static Managers instance { get { Init(); return s_instance; }  }
 
     public static InputManager input { get { return instance._input;  } }
     public static ResourceManager Resource { get { return instance._resource; } }
+    public static UIManager UI { get { return instance._ui; } }
 
     private void Start()
     {

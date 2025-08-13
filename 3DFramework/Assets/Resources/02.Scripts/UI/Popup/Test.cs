@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class Test : MonoBehaviour
 {
-    string path = "UI/UI_Button";
+    string path = "UI/Popup/UI_Button";
     [SerializeField]
     GameObject UI_Button;
     void Start()

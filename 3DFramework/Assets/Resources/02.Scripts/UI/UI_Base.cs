@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 public class UI_Base : MonoBehaviour
 {
@@ -42,4 +43,23 @@ public class UI_Base : MonoBehaviour
     protected Text GetText(int idx) { return Get<Text>(idx); }
     protected Button GetButton(int idx) { return Get<Button>(idx); }
     protected Image GetImage(int idx) { return Get<Image>(idx); }
+
+    public static void AddUIEvent(GameObject go, Action<PointerEventData> action , Define.UIEvent eventType = Define.UIEvent.Click)
+    {
+        UI_EventHandler evnt = Util.GetorAddComponent<UI_EventHandler>(go);
+
+        switch (eventType)
+        {
+            case Define.UIEvent.Click:
+                evnt.OnClickHandler -= action;
+                evnt.OnClickHandler += action;
+                break;
+
+            case Define.UIEvent.Drag:
+                evnt.OnDragHandler -= action;
+                evnt.OnDragHandler += action;
+                break;
+        }
+        // 기존 함수 -> evnt.OnDragHandler += (PointerEventData data) => { go.transform.position = data.position; };
+    }
 }

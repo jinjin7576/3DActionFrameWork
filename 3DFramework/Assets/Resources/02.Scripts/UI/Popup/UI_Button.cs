@@ -5,7 +5,7 @@ using System;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
-public class UI_Button : UI_Base
+public class UI_Button : UI_Popup
 {
     enum Buttons
     {
@@ -35,10 +35,16 @@ public class UI_Button : UI_Base
         GetText((int)Texts.PointText).text = "Test";
 
         GameObject go = GetImage((int)Images.Image).gameObject;
-        //이부분을 UI_Base에서 함수 형태로 한다면...?
-        UI_EventHandler evt = go.GetComponent<UI_EventHandler>();
-        evt.OnDragHandler +=
-            ((PointerEventData data) => { go.transform.position = data.position; });
+        AddUIEvent(go, (PointerEventData data) => { go.transform.position = data.position; }, Define.UIEvent.Drag);
+
+        GetButton((int)Buttons.PointButton).gameObject.AddUIEvent(OnButtonClicked);
+    }
+
+    int _score = 0;
+    private void OnButtonClicked(PointerEventData data)
+    {
+        _score++;
+        GetText((int)Texts.ScoreText).text = $"점수 : {_score}";
     }
 }
 

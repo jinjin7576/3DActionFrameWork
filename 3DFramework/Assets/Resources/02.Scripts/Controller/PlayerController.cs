@@ -9,10 +9,12 @@ public class PlayerController : MonoBehaviour
 
     void Start()
     {
-        //Managers.input.KeyAction -= Onkeyboard;
-        //Managers.input.KeyAction += Onkeyboard;
+        Managers.input.KeyAction -= Onkeyboard;
+        Managers.input.KeyAction += Onkeyboard;
         Managers.input.MouseAction -= OnMouseCliked;
         Managers.input.MouseAction += OnMouseCliked;
+
+        Managers.UI.ShowPopupUI<UI_Button>();
     }
 
    
@@ -53,17 +55,22 @@ public class PlayerController : MonoBehaviour
         }
         if (Input.GetKey(KeyCode.A))
         {
-            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(Vector3.right), 0.2f);
+            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(Vector3.left), 0.2f);
             //transform.Translate(Vector3.forward * Time.deltaTime * _speed);
             //transform.Translate(Vector3.left * Time.deltaTime * _speed);
             transform.position += Vector3.right * Time.deltaTime * _speed;
         }
         if (Input.GetKey(KeyCode.D))
         {
-            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(Vector3.left), 0.2f);
+            transform.rotation = Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(Vector3.right), 0.2f);
             //transform.Translate(Vector3.forward * Time.deltaTime * _speed);
             //transform.Translate(Vector3.right * Time.deltaTime * _speed);
             transform.position += Vector3.left * Time.deltaTime * _speed;
+        }
+
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            Managers.UI.ClosePopupUI();
         }
     } 
 
