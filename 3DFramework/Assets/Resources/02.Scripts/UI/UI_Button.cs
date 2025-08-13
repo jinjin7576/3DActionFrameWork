@@ -15,17 +15,31 @@ public class UI_Button : MonoBehaviour
     enum Texts
     {
         PointText,
-        ScroeText,
+        ScoreText,
+    }
+    enum GameObjects
+    {
+        TestObject,
     }
 
     private void Start()
     {
         Bind<Button>(typeof(Buttons));
         Bind<Text>(typeof(Texts));
+        Bind<GameObject>(typeof(GameObjects));
+
+        Get<Text>((int)Texts.ScoreText).text = "Test";
     }
 
-    //컴포넌트에 연결할 함수 형태
-    private void Bind<T>(Type type) where T : UnityEngine.Object //Type 쓰려면 using System
+    private T Get<T>(int idx) where T : UnityEngine.Object
+    {
+        UnityEngine.Object[] objects = null;
+        if (_objects.TryGetValue(typeof(T), out objects) == false) //값이 없으면 그냥 리턴 (키가 포함되어 있는가?)
+            return null;
+        return objects[idx] as T; //오브젝트의 인덱스 번호를 추출한 다음 T로 캐스팅
+    }
+
+    private void Bind<T>(Type type) where T : UnityEngine.Object
     {
         string[] names = Enum.GetNames(type);
 
@@ -34,7 +48,18 @@ public class UI_Button : MonoBehaviour
 
         for (int i = 0; i < names.Length; i++)
         {
-            //Util에서 만든 함수를 이용해 처리
+            if (typeof(T) == typeof(GameObject))
+            {
+                objects[i] = Util.FindChild(gameObject, names[i], true);
+            }
+            else
+            {
+                objects[i] = Util.FindChild<T>(gameObject, names[i], true);
+            }
+            if (objects[i] == null)
+            {
+                Debug.Log($"Failed to bind ({names[i]})");
+            }
         }
     }
 }

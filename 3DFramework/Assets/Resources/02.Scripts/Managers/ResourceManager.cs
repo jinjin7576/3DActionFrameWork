@@ -11,7 +11,7 @@ public class ResourceManager
 
     public GameObject Instatiate(string path, Transform parent = null)
     {
-        GameObject prefab = Load<GameObject>($"Prefabs/{path}");
+        GameObject prefab = Load<GameObject>($"03.Prefabs/{path}");
         if (prefab == null)
         {
             Debug.Log($"Failed to load prefab : {path}");
