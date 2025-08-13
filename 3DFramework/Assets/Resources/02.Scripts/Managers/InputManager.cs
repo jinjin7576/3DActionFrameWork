@@ -1,5 +1,6 @@
 using UnityEngine;
 using System;
+using UnityEngine.EventSystems;
 
 public class InputManager //매니저스가 있어서 굳이 컴포넌트로 만들 필요가 없어서 일반적인 C# 파일로 만듦
 {
@@ -10,6 +11,10 @@ public class InputManager //매니저스가 있어서 굳이 컴포넌트로 만들 필요가 없어서
     
     public void OnUpdate()
     {
+        if (EventSystem.current.IsPointerOverGameObject()) //UI를 눌렀을 때 마우스 클릭 액션이 발행되지 않도록
+        {
+            return;
+        }
         if (Input.anyKey && KeyAction != null)
             KeyAction.Invoke();
 
