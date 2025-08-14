@@ -1,0 +1,26 @@
+using UnityEngine;
+
+public class GameScene : BaseScene
+{
+    private void Awake()
+    {
+        Init();
+    }
+
+    protected override void Init()
+    {
+        base.Init();
+        _sceneType = Define.Scene.Game;
+        Managers.UI.ShowScenenUI<UI_Inven>();
+    }
+
+    public override void Clear()
+    {
+        
+    }
+
+    void Start()
+    {
+        
+    }
+}

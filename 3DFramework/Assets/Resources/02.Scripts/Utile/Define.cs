@@ -16,4 +16,11 @@ public class Define
         Click,
         Drag, //나중에 필요하다면 Drag 관련 이벤트를 추가해도 됨(DragEnd, DragBegin 등)
     }
+    public enum Scene
+    {
+        Unknown,
+        Login,
+        Lobby,
+        Game,
+    }
 }
