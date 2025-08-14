@@ -30,4 +30,25 @@ public class UIManager
         popup = null;
         _order--;
     }
+
+    public void ClosePopupUI(UI_Popup popup)
+    {
+        if (_popupStack.Count == 0)
+            return;
+        if (_popupStack.Peek() != popup)
+        {
+            Debug.Log("Close Popup Failed!");
+            return;
+        }
+
+        ClosePopupUI();
+    }
+
+    public void CloseAllPopupUI()
+    {
+        while (_popupStack.Count > 0)
+            ClosePopupUI();
+    }
+
+
 }
