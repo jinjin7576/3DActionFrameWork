@@ -1,16 +1,26 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
-public class SceneManagerEx : MonoBehaviour
+public class SceneManagerEx
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
+    public BaseScene CurrentScene
     {
-        
+        get
+        {
+            return GameObject.FindObjectOfType<BaseScene>();
+        }
     }
 
-    // Update is called once per frame
-    void Update()
+    public void LoadScene(Define.Scene type)
     {
-        
+        CurrentScene.Clear();
+
+        SceneManager.LoadScene(GetSceneNmae(type));
+    }
+    string GetSceneNmae(Define.Scene type)
+    {
+        string name = System.Enum.GetName(typeof(Define.Scene), type);
+        return name;
     }
 }
+

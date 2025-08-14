@@ -6,14 +6,14 @@ public class Managers : MonoBehaviour
     ResourceManager _resource = new ResourceManager();
     InputManager _input = new InputManager();
     UIManager _ui = new UIManager();
-    SceneManagerEx _scnen = new SceneManagerEx();
+    SceneManagerEx _scene = new SceneManagerEx();
 
     public static Managers instance { get { Init(); return s_instance; }  }
 
     public static InputManager input { get { return instance._input;  } }
     public static ResourceManager Resource { get { return instance._resource; } }
     public static UIManager UI { get { return instance._ui; } }
-    public static SceneManagerEx Scnen { get { return instance._scnen; } }
+    public static SceneManagerEx Scnen { get { return instance._scene; } }
 
     private void Start()
     {
