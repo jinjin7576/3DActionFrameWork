@@ -20,7 +20,8 @@ public class LoginScene : BaseScene
     {
         if (Input.GetKeyDown(KeyCode.Q))
         {
-
+            Managers.Scnen.LoadScene(Define.Scene.Game);
+            //SceneManager.LoadScene("Game");
         }
     }
 }
