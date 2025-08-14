@@ -4,19 +4,54 @@ using System.Collections;
 
 public class UIManager
 {
-    int _order = 0;
+    int _order = 10;
 
     Stack<UI_Popup> _popupStack = new Stack<UI_Popup>();
 
+    UI_Scene _scnenUI = null;
+
+    public GameObject Root
+    {
+        get
+        {
+            GameObject root = GameObject.Find("@UI_Root");
+            if (root == null)
+                root = new GameObject { name = "@UI_Root" };
+            return root;
+        }
+    }
+
+    public T ShowScenenUI<T>(string name = null) where T : UI_Scene
+    {
+        if (string.IsNullOrEmpty(name))
+        {
+            name = typeof(T).Name;
+        }
+
+        GameObject root = GameObject.Find("@UI_Root");
+
+        GameObject go = Managers.Resource.Instatiate($"UI/Popup/{name}");
+        T scnenUI = Util.GetorAddComponent<T>(go);
+        _scnenUI = scnenUI;
+
+        go.transform.SetParent(Root.transform);
+
+        return scnenUI;
+    }
     public T ShowPopupUI<T>(string name = null) where T : UI_Popup
     {
         if (string.IsNullOrEmpty(name))
         {
             name = typeof(T).Name;
         }
+
+        GameObject root = GameObject.Find("@UI_Root");
+
         GameObject go = Managers.Resource.Instatiate($"UI/Popup/{name}");
         T popup = Util.GetorAddComponent<T>(go);
         _popupStack.Push(popup);
+
+        go.transform.SetParent(Root.transform);
 
         return popup;
     }
@@ -50,5 +85,21 @@ public class UIManager
             ClosePopupUI();
     }
 
+    public void SetCanvas (GameObject go, bool sort = true)
+    {
+        Canvas canvas = Util.GetorAddComponent<Canvas>(go);
+        canvas.renderMode = RenderMode.ScreenSpaceOverlay;
+        
+        canvas.overrideSorting = true;
 
+        if (sort)
+        {
+            canvas.sortingOrder = _order;
+            _order++;
+        }
+        else 
+        {
+            canvas.sortingOrder = 0;
+        }
+    }
 }

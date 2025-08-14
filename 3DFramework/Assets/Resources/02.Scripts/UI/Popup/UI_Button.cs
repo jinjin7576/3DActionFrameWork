@@ -7,6 +7,8 @@ using UnityEngine.EventSystems;
 
 public class UI_Button : UI_Popup
 {
+    int _score = 0;
+
     enum Buttons
     {
         PointButton,
@@ -26,6 +28,13 @@ public class UI_Button : UI_Popup
     }
     private void Start()
     {
+        Init();
+    }
+
+    public override void Init()
+    {
+        base.Init();
+
         Bind<Button>(typeof(Buttons));
         Bind<Text>(typeof(Texts));
         Bind<GameObject>(typeof(GameObjects));
@@ -40,7 +49,6 @@ public class UI_Button : UI_Popup
         GetButton((int)Buttons.PointButton).gameObject.AddUIEvent(OnButtonClicked);
     }
 
-    int _score = 0;
     private void OnButtonClicked(PointerEventData data)
     {
         _score++;

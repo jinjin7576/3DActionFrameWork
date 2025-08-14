@@ -7,6 +7,7 @@ public class PlayerController : MonoBehaviour
 
     Vector3 _destPos;
 
+    UI_Button uipopup;
     void Start()
     {
         Managers.input.KeyAction -= Onkeyboard;
@@ -14,7 +15,7 @@ public class PlayerController : MonoBehaviour
         Managers.input.MouseAction -= OnMouseCliked;
         Managers.input.MouseAction += OnMouseCliked;
 
-        Managers.UI.ShowPopupUI<UI_Button>();
+        uipopup = Managers.UI.ShowPopupUI<UI_Button>();
     }
 
    
@@ -70,7 +71,7 @@ public class PlayerController : MonoBehaviour
 
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            Managers.UI.ClosePopupUI();
+            Managers.UI.ClosePopupUI(uipopup);
         }
     } 
 
