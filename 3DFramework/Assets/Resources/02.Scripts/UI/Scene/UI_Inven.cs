@@ -23,9 +23,10 @@ public class UI_Inven : UI_Scene
             Managers.Resource.Destroy(child.gameObject);
         }
         
-        for (int i = 0; i < 8; i++) //실제로는 인벤토리 정보를 참고해야하지만, 테스트이니까.
+        for (int i = 0; i < 12; i++) //실제로는 인벤토리 정보를 참고해야하지만, 테스트이니까.
         {
-            
+            UI_Inven_Item ivenitem = Managers.UI.MakeSubItem<UI_Inven_Item>(gridPanel.transform);
+            ivenitem.SetInfo($"테스트 {i}번");
         }
     }
 }

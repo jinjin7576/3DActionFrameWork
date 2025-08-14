@@ -28,9 +28,7 @@ public class UIManager
             name = typeof(T).Name;
         }
 
-        GameObject root = GameObject.Find("@UI_Root");
-
-        GameObject go = Managers.Resource.Instatiate($"UI/Popup/{name}");
+        GameObject go = Managers.Resource.Instatiate($"UI/Scene/{name}");
         T scnenUI = Util.GetorAddComponent<T>(go);
         _scnenUI = scnenUI;
 
@@ -38,6 +36,19 @@ public class UIManager
 
         return scnenUI;
     }
+
+    public T MakeSubItem<T>(Transform parent = null, string name = null) where T : UI_Base
+    {
+        if (string.IsNullOrEmpty(name))
+        {
+            name = typeof(T).Name;
+        }
+        GameObject go = Managers.Resource.Instatiate($"UI/SubItem/{name}");
+        if (parent != null) go.transform.SetParent(parent);
+
+        return Util.GetorAddComponent<T>(go);
+    }
+
     public T ShowPopupUI<T>(string name = null) where T : UI_Popup
     {
         if (string.IsNullOrEmpty(name))

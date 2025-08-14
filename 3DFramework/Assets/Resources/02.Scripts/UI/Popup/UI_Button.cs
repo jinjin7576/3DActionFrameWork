@@ -44,9 +44,9 @@ public class UI_Button : UI_Popup
         GetText((int)Texts.PointText).text = "Test";
 
         GameObject go = GetImage((int)Images.Image).gameObject;
-        AddUIEvent(go, (PointerEventData data) => { go.transform.position = data.position; }, Define.UIEvent.Drag);
+        BindUIEvent(go, (PointerEventData data) => { go.transform.position = data.position; }, Define.UIEvent.Drag);
 
-        GetButton((int)Buttons.PointButton).gameObject.AddUIEvent(OnButtonClicked);
+        GetButton((int)Buttons.PointButton).gameObject.BindUIEvent(OnButtonClicked);
     }
 
     private void OnButtonClicked(PointerEventData data)

@@ -18,9 +18,14 @@ public class ResourceManager
             return null;
         }
 
-        //object를 붙이지 않으면 재귀하려고 할거라서
-        //자료를 더 찾아볼것
-        return Object.Instantiate(prefab, parent);
+        GameObject go = Object.Instantiate(prefab, parent);
+        int index = go.name.IndexOf("(Clone)"); // UI_Inven_Item(Clone) -> 원래이름 
+        if (index > 0)
+        {
+            go.name = go.name.Substring(0, index); //UI_Inven_Item -> 추출한 이름 / (Clone) -> 뽑아낸 이름
+        }
+
+        return go;
     }
     public void Destroy(GameObject go)
     {
