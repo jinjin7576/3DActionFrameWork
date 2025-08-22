@@ -34,4 +34,9 @@ public class InputManager //매니저스가 있어서 굳이 컴포넌트로 만들 필요가 없어서
             }
         }
     }
+    public void Clear()
+    {
+        KeyAction = null;
+        MouseAction = null;
+    }
 }
