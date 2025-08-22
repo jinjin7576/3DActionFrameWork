@@ -23,4 +23,10 @@ public class Define
         Lobby,
         Game,
     }
+    public enum Sound
+    {
+        Bgm,
+        Effect,
+        MaxCount
+    }
 }

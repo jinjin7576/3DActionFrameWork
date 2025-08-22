@@ -7,6 +7,7 @@ public class Managers : MonoBehaviour
     InputManager _input = new InputManager();
     UIManager _ui = new UIManager();
     SceneManagerEx _scene = new SceneManagerEx();
+    SoundManager _sound = new SoundManager();
 
     public static Managers instance { get { Init(); return s_instance; }  }
 
@@ -14,6 +15,7 @@ public class Managers : MonoBehaviour
     public static ResourceManager Resource { get { return instance._resource; } }
     public static UIManager UI { get { return instance._ui; } }
     public static SceneManagerEx Scnen { get { return instance._scene; } }
+    public static SoundManager Sound { get { return instance._sound; } }
 
     private void Start()
     {
