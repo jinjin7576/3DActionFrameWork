@@ -35,10 +35,10 @@ public class Managers : MonoBehaviour
             {
                 go = new GameObject { name = "@Manager" }; //코드상으로 오브젝트 만들기
                 go.AddComponent<Managers>();
-
             }
             DontDestroyOnLoad(go);
             s_instance = go.GetComponent<Managers>();
+            s_instance._sound.Init();
         }
     }
 }
