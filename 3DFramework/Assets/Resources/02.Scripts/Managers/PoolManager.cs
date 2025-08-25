@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class PoolManager
 {
+    #region Pool
     class Pool
     {
         public GameObject Original { get; private set; }
@@ -55,6 +56,8 @@ public class PoolManager
             return poolable;
         }
     }
+    #endregion
+
     //각각 풀들은 키를 이용해 이름을 이용해서 관리하기
     Dictionary<string, Pool> _pool = new Dictionary<string, Pool>();
 
@@ -69,13 +72,50 @@ public class PoolManager
 
     }
 
+    public void Push (Poolable poolable)
+    {
+        string name = poolable.gameObject.name;
+
+        //만약 생성을 한번도 안하고 풀이 없는 상태에서 Push를 한 상태
+        if (_pool.ContainsKey(name) == false)
+        {
+            GameObject.Destroy(poolable.gameObject);
+            return;
+        }
+
+        _pool[name].Push(poolable);
+    }
 
     public Poolable Pop(GameObject original, Transform parent = null)
     {
-        return null;
+        if (_pool.ContainsKey(original.name) == false)
+        {
+            CreatPool(original);
+        }
+        return _pool[original.name].Pop(parent);
     }
-    public GameObject GetOrigianl(string name)
+
+    private void CreatPool(GameObject original , int count = 5)
     {
-        return null;
+        Pool pool = new Pool();
+        pool.Init(original, count);
+        pool.Root.parent = _root;
+
+        _pool.Add(original.name, pool);
+    }
+
+    public GameObject GetOriginal(string name)
+    {
+        if (_pool.ContainsKey(name) == false) return null;
+        return _pool[name].Original;
+    }
+    
+    public void Clear()
+    {
+        foreach(Transform child in _root)
+        {
+            GameObject.Destroy(child.gameObject);
+        }
+        _pool.Clear();
     }
 }
