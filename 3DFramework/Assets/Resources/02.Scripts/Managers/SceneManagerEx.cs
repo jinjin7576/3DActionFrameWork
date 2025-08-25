@@ -14,7 +14,7 @@ public class SceneManagerEx
 
     public void LoadScene(Define.Scene type)
     {
-        CurrentScene.Clear();
+        Managers.Clear();
 
         SceneManager.LoadScene(GetSceneNmae(type));
     }
@@ -24,9 +24,9 @@ public class SceneManagerEx
         return name;
     }
 
-    internal void Clear()
+    public void Clear()
     {
-        throw new NotImplementedException();
+        CurrentScene.Clear();
     }
 }
 
