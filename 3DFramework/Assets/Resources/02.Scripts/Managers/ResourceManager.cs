@@ -34,10 +34,16 @@ public class ResourceManager
             return null;
         }
         GameObject go = Object.Instantiate(original, parent);
+
         int index = go.name.IndexOf("(Clone)");
         if (index > 0)
         {
             go.name = go.name.Substring(0, index);
+        }
+
+        if (original.GetComponent<Poolable>() != null)
+        {
+            return Managers.Pool.Pop(original, parent).gameObject;
         }
 
         return go;
@@ -48,6 +54,14 @@ public class ResourceManager
         {
             return;
         }
+
+        Poolable poolable = go.GetComponent<Poolable>();
+        if (poolable != null)
+        {
+            Managers.Pool.Push(poolable);
+            return;
+        }
+
         Object.Destroy(go);
     }
 }

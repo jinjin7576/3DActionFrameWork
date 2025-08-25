@@ -51,6 +51,11 @@ public class PoolManager
                 poolable = Create();
             }
             poolable.gameObject.SetActive(true);
+
+            //DontDestroyOnLoad 해체 용도
+            if (parent == null)
+                poolable.transform.parent = Managers.Scnen.CurrentScene.transform;
+
             poolable.transform.parent = parent;
             poolable.IsUsing = true;
             return poolable;

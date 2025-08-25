@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class GameScene : BaseScene
@@ -12,6 +13,17 @@ public class GameScene : BaseScene
         base.Init();
         _sceneType = Define.Scene.Game;
         Managers.UI.ShowScenenUI<UI_Inven>();
+
+        List<GameObject> list = new List<GameObject>();
+        for (int i = 0; i < 2; i++)
+        {
+            list.Add(Managers.Resource.Instatiate("Player"));
+        }
+        foreach (GameObject obj in list)
+        {
+            Managers.Resource.Destroy(obj);
+        }
+           
     }
 
     public override void Clear()
