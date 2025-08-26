@@ -12,8 +12,9 @@ public class GameScene : BaseScene
     {
         base.Init();
         _sceneType = Define.Scene.Game;
-        Managers.UI.ShowScenenUI<UI_Inven>();
+        //Managers.UI.ShowScenenUI<UI_Inven>();
         Dictionary<int, Data.Stat> Dict = Managers.Data.StatDict;
+        gameObject.GetorAddComponent<CursorController>();
     }
 
     public override void Clear()
