@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class PlayerController : MonoBehaviour
 {
@@ -109,15 +110,26 @@ public class PlayerController : MonoBehaviour
     {
         Vector3 dir = _destPos - transform.position;
 
-        if (dir.magnitude < 0.0001f)
+        if (dir.magnitude < 0.01f)
         {
             _state = PlayerState.Idle;
         }
         else
         {
-            float moveDist = Mathf.Clamp(_speed * Time.deltaTime, 0, dir.magnitude);
+            NavMeshAgent nma = gameObject.GetorAddComponent<NavMeshAgent>();
 
-            transform.position += dir.normalized * moveDist;
+            float moveDist = Mathf.Clamp(_speed * Time.deltaTime, 0, dir.magnitude);
+            nma.Move(dir.normalized * moveDist);
+
+            Debug.DrawRay(transform.position, dir.normalized, Color.green);
+
+            if (Physics.Raycast(transform.position, dir, 1.0f, LayerMask.GetMask("Block")))
+            {
+                _state = PlayerState.Idle;
+                return;
+            }
+
+            //transform.position += dir.normalized * moveDist;
             transform.rotation =
                 Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(dir), 20 * Time.deltaTime);
         }
