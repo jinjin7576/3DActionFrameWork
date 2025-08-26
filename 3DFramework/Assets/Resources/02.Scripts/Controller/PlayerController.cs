@@ -11,6 +11,8 @@ public class PlayerController : MonoBehaviour
     UI_Button uipopup;
 
     PlayerStat _stat;
+
+    int _mask = (1 << (int)Define.Layer.Ground | 1 << (int)Define.Layer.Monster);
     public enum PlayerState
     {
         Die,
@@ -96,10 +98,19 @@ public class PlayerController : MonoBehaviour
         Debug.DrawRay(Camera.main.transform.position, ray.direction * 100.0f, Color.red, 1.0f);
 
         RaycastHit hit;
-        if (Physics.Raycast(ray, out hit, 100.0f, LayerMask.GetMask("Ground") | LayerMask.GetMask("Monster")))
+        if (Physics.Raycast(ray, out hit, 100.0f, _mask))
         {
             _destPos = hit.point;
             _state = PlayerState.Moving;
+        }
+
+        if (hit.collider.gameObject.layer == (int)Define.Layer.Monster)
+        {
+            Debug.Log("Monster Click!");
+        }
+        else
+        {
+            Debug.Log("Ground Click!");
         }
     }
     
@@ -124,7 +135,7 @@ public class PlayerController : MonoBehaviour
 
             Debug.DrawRay(transform.position, dir.normalized, Color.green);
 
-            if (Physics.Raycast(transform.position, dir, 1.0f, LayerMask.GetMask("Block")))
+            if (Physics.Raycast(transform.position, dir, 1.0f, _mask))
             {
                 _state = PlayerState.Idle;
                 return;
