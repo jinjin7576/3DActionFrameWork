@@ -29,4 +29,10 @@ public class Define
         Effect,
         MaxCount
     }
+    public enum Layer
+    {
+        Ground = 9,
+        Block = 12,
+        Monster = 13,
+    }
 }

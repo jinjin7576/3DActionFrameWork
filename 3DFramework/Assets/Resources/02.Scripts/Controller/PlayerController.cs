@@ -4,20 +4,28 @@ using UnityEngine.AI;
 
 public class PlayerController : MonoBehaviour
 {
-    public float _speed = 3;
-
     Vector3 _destPos;
-
+    
+    public PlayerState _state = PlayerState.Idle;
+   
     UI_Button uipopup;
+
+    PlayerStat _stat;
+    public enum PlayerState
+    {
+        Die,
+        Moving,
+        Idle,
+        Skill,
+    }
     void Start()
     {
-        Managers.input.KeyAction -= Onkeyboard;
-        Managers.input.KeyAction += Onkeyboard;
+        //Managers.input.KeyAction -= Onkeyboard;
+        //Managers.input.KeyAction += Onkeyboard;
         Managers.input.MouseAction -= OnMouseCliked;
         Managers.input.MouseAction += OnMouseCliked;
 
-        //uipopup = Managers.UI.ShowPopupUI<UI_Button>();
-        //Managers.UI.ShowScenenUI<UI_Inven>();
+        _stat = GetComponent<PlayerStat>();
     }
 
    
@@ -40,7 +48,8 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    void Onkeyboard()
+    /*
+     * void Onkeyboard()
     {
         //입력을 받아 전후좌우 이동
         if (Input.GetKey(KeyCode.W))
@@ -75,7 +84,8 @@ public class PlayerController : MonoBehaviour
         {
             Managers.UI.ClosePopupUI(uipopup);
         }
-    } 
+    }
+    */
 
     private void OnMouseCliked(Define.MouseEvent evt)
     {
@@ -86,22 +96,13 @@ public class PlayerController : MonoBehaviour
         Debug.DrawRay(Camera.main.transform.position, ray.direction * 100.0f, Color.red, 1.0f);
 
         RaycastHit hit;
-        if (Physics.Raycast(ray, out hit, 100.0f, LayerMask.GetMask("Ground")))
+        if (Physics.Raycast(ray, out hit, 100.0f, LayerMask.GetMask("Ground") | LayerMask.GetMask("Monster")))
         {
             _destPos = hit.point;
             _state = PlayerState.Moving;
         }
     }
-
-    public enum PlayerState
-    {
-        Die,
-        Moving,
-        Idle,
-    }
-
-    public PlayerState _state = PlayerState.Idle;
-
+    
     void UpdateDie()
     {
 
@@ -118,7 +119,7 @@ public class PlayerController : MonoBehaviour
         {
             NavMeshAgent nma = gameObject.GetorAddComponent<NavMeshAgent>();
 
-            float moveDist = Mathf.Clamp(_speed * Time.deltaTime, 0, dir.magnitude);
+            float moveDist = Mathf.Clamp(_stat.MoveSpeed * Time.deltaTime, 0, dir.magnitude);
             nma.Move(dir.normalized * moveDist);
 
             Debug.DrawRay(transform.position, dir.normalized, Color.green);
@@ -135,7 +136,7 @@ public class PlayerController : MonoBehaviour
         }
 
         Animator ani = GetComponent<Animator>();
-        ani.SetFloat("speed", _speed);
+        ani.SetFloat("speed", _stat.MoveSpeed);
     }
     void UpdateIdle()
     {

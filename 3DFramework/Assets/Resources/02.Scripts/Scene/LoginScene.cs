@@ -11,8 +11,6 @@ public class LoginScene : BaseScene
     {
         base.Init();
         _sceneType = Define.Scene.Login;
-        for (int i = 0; i < 10; i++)
-            Managers.Resource.Instatiate("Player");
     }
     void Start()
     {
