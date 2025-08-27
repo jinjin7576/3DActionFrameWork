@@ -33,7 +33,7 @@ public class PlayerController : MonoBehaviour
             switch (_state)
             {
                 case PlayerState.Die:
-                    
+
                     break;
                 case PlayerState.Idle:
                     ani.CrossFade("WAIT", 0.1f);
@@ -48,13 +48,15 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    
+
     void Start()
     {
         Managers.input.MouseAction -= OnMouseEvent;
         Managers.input.MouseAction += OnMouseEvent;
 
         _stat = GetComponent<PlayerStat>();
+
+        Managers.UI.MakeWorldSpaceUI<UI_HpBar>(gameObject.transform, "UI_HpBar");
     }
 
     void Update()
@@ -127,16 +129,6 @@ public class PlayerController : MonoBehaviour
                 break;
             case Define.MouseEvent.Press:
                 {
-                    /*
-                    if (_lockTarget != null)
-                    {
-                        _destPos = _lockTarget.transform.position;
-                    }
-                    else if (raycastHit)
-                    {
-                        _destPos = hit.point;
-                    }
-                    */
                     if (_lockTarget == null && raycastHit)
                     {
                         _destPos = hit.point;
@@ -144,7 +136,7 @@ public class PlayerController : MonoBehaviour
                 }
                 break;
             case Define.MouseEvent.PointerUp:
-                _skillStop = true; //up이면 클릭으로 한번 공격처리는 해줌
+                _skillStop = true;
                 break;
         }
     }
