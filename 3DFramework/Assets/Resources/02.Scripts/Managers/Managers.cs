@@ -2,7 +2,15 @@ using UnityEngine;
 
 public class Managers : MonoBehaviour
 {
-    static Managers s_instance;    
+    static Managers s_instance;
+    public static Managers instance { get { Init(); return s_instance; }  }
+
+    #region Contents
+    GameManager _game = new GameManager();
+    public static GameManager Game { get { return s_instance._game; } }
+    #endregion
+
+    #region Core
     ResourceManager _resource = new ResourceManager();
     InputManager _input = new InputManager();
     UIManager _ui = new UIManager();
@@ -11,8 +19,6 @@ public class Managers : MonoBehaviour
     PoolManager _pool = new PoolManager();
     DataManager _data = new DataManager();
 
-    public static Managers instance { get { Init(); return s_instance; }  }
-
     public static InputManager input { get { return instance._input;  } }
     public static ResourceManager Resource { get { return instance._resource; } }
     public static UIManager UI { get { return instance._ui; } }
@@ -20,6 +26,7 @@ public class Managers : MonoBehaviour
     public static SoundManager Sound { get { return instance._sound; } }
     public static PoolManager Pool { get { return instance._pool; } }
     public static DataManager Data { get { return instance._data; } }
+    #endregion
 
     private void Start()
     {

@@ -7,6 +7,8 @@ public abstract class BaseScene : MonoBehaviour
 {
     public Define.Scene _sceneType { get; protected set; } = Define.Scene.Unknown;
 
+    protected CameraController _camera;
+
     void Start()
     {
 
@@ -19,6 +21,7 @@ public abstract class BaseScene : MonoBehaviour
         {
             Managers.Resource.Instatiate("UI/EventSystem").name = "@EventSystem";
         }
+        _camera = Camera.main.gameObject.GetorAddComponent<CameraController>();
     }
     public abstract void Clear();
    

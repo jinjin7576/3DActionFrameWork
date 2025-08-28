@@ -15,4 +15,8 @@ public static class Extension
     {
         return Util.GetorAddComponent<T>(go);
     }
+    public static bool IsValid(this GameObject go)
+    {
+        return go != null && go.activeSelf;
+    }
 }

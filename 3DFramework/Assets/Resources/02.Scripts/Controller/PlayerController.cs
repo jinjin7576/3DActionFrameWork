@@ -2,54 +2,15 @@ using System;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class PlayerController : MonoBehaviour
+public class PlayerController : BaseController
 {
-    Vector3 _destPos;
-
     PlayerStat _stat;
 
     int _mask = (1 << (int)Define.Layer.Ground | 1 << (int)Define.Layer.Monster);
 
-    GameObject _lockTarget;
-
     bool _skillStop = false;
-    public enum PlayerState
-    {
-        Die,
-        Moving,
-        Idle,
-        Skill,
-    }
 
-    private PlayerState _state = PlayerState.Idle;
-
-    public PlayerState State
-    {
-        get { return _state; }
-        set
-        {
-            _state = value;
-            Animator ani = GetComponent<Animator>();
-            switch (_state)
-            {
-                case PlayerState.Die:
-
-                    break;
-                case PlayerState.Idle:
-                    ani.CrossFade("WAIT", 0.1f);
-                    break;
-                case PlayerState.Moving:
-                    ani.CrossFade("RUN", 0.1f);
-                    break;
-                case PlayerState.Skill:
-                    ani.CrossFade("Attack", 0.1f, -1, 0); //루프시키는 코드 0부터 다시시작, -1 의미없음
-                    break;
-            }
-        }
-    }
-
-
-    void Start()
+    public override void Init()
     {
         Managers.input.MouseAction -= OnMouseEvent;
         Managers.input.MouseAction += OnMouseEvent;
@@ -57,40 +18,21 @@ public class PlayerController : MonoBehaviour
         _stat = GetComponent<PlayerStat>();
 
         Managers.UI.MakeWorldSpaceUI<UI_HpBar>(gameObject.transform, "UI_HpBar");
-    }
 
-    void Update()
-    {
-        switch (State)
-        {
-            case PlayerState.Die:
-                UpdateDie();
-                break;
-
-            case PlayerState.Moving:
-                UpdateMoving();
-                break;
-
-            case PlayerState.Idle:
-                UpdateIdle();
-                break;
-            case PlayerState.Skill:
-                UpdateSkill();
-                break;
-        }
+        WorldObjectType = Define.WorldObject.Player;
     }
 
     private void OnMouseEvent(Define.MouseEvent evt)
     {
         switch (State)
         {
-            case PlayerState.Idle:
+            case Define.State.Idle:
                 OnMouseEvent_IdleRun(evt);
                 break;
-            case PlayerState.Moving:
+            case Define.State.Moving:
                 OnMouseEvent_IdleRun(evt);
                 break;
-            case PlayerState.Skill:
+            case Define.State.Skill:
                 if (evt == Define.MouseEvent.PointerUp)
                 {
                     _skillStop = true;
@@ -112,7 +54,7 @@ public class PlayerController : MonoBehaviour
                     if (raycastHit)
                     {
                         _destPos = hit.point;
-                        State = PlayerState.Moving;
+                        State = Define.State.Moving;
                         _skillStop = false; //이때는 Idle일지, 재공격할지 정해지지 않음
                         if (hit.collider.gameObject.layer == (int)Define.Layer.Monster)
                         {
@@ -141,7 +83,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private void UpdateSkill()
+    protected override void UpdateSkill()
     {
         if (_lockTarget != null)
         {
@@ -153,20 +95,26 @@ public class PlayerController : MonoBehaviour
     void OnHitEvent()
     {
         Debug.Log("OnHitEvent");
+        if (_lockTarget != null)
+        {
+            Stat targetStat = _lockTarget.GetComponent<Stat>();
+            Stat myStat = gameObject.GetComponent<Stat>();
+            //음수로 떨어지면 공격했을때 힐이 될것. 그래서 음수로 떨어지면 0이 되도록 처리
+            int damage = Mathf.Max(0, myStat.Attack - targetStat.Defense);
+            Debug.Log(damage);
+            targetStat.Hp -= damage;
+        }
+
         if (_skillStop)
         {
-            State = PlayerState.Idle;
+            State = Define.State.Idle;
         }
         else
         {
-            State = PlayerState.Skill;
+            State = Define.State.Skill;
         }
     }
-    void UpdateDie()
-    {
-
-    }
-    void UpdateMoving()
+    protected override void UpdateMoving()
     {
         if (_lockTarget != null)
         {
@@ -175,7 +123,7 @@ public class PlayerController : MonoBehaviour
             if (distance <= 1.5f)
             {
                 Debug.Log("Skill");
-                State = PlayerState.Skill;
+                State = Define.State.Skill;
                 return;
             }
         }
@@ -184,36 +132,33 @@ public class PlayerController : MonoBehaviour
 
         if (dir.magnitude < 0.1f)
         {
-            State = PlayerState.Idle;
+            State = Define.State.Idle;
         }
         else
         {
-            NavMeshAgent nma = gameObject.GetorAddComponent<NavMeshAgent>();
-
-            float moveDist = Mathf.Clamp(_stat.MoveSpeed * Time.deltaTime, 0, dir.magnitude);
-            nma.Move(dir.normalized * moveDist);
+            //NavMeshAgent nma = gameObject.GetorAddComponent<NavMeshAgent>();
+            //float moveDist = Mathf.Clamp(_stat.MoveSpeed * Time.deltaTime, 0, dir.magnitude);
+            //nma.Move(dir.normalized * moveDist);
 
             Debug.DrawRay(transform.position, dir.normalized, Color.green);
 
             if (Physics.Raycast(transform.position, dir, 1.0f, _mask))
             {
-                State = PlayerState.Idle;
+                State = Define.State.Idle;
                 return;
             }
             if (Physics.Raycast(transform.position, dir, 1.0f, LayerMask.GetMask("Block")))
             {
                 if (Input.GetMouseButton(0) == false)
                 {
-                    State = PlayerState.Idle;
+                    State = Define.State.Idle;
                 }
                 return;
             }
+            float moveDist = Mathf.Clamp(_stat.MoveSpeed * Time.deltaTime, 0, dir.magnitude);
+            transform.position += dir.normalized * moveDist;
             transform.rotation =
                 Quaternion.Slerp(transform.rotation, Quaternion.LookRotation(dir), 20 * Time.deltaTime);
         }
-    }
-    void UpdateIdle()
-    {
-
     }
 }

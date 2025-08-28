@@ -37,4 +37,17 @@ public class Define
         Block = 12,
         Monster = 13,
     }
+    public enum State
+    {
+        Die,
+        Moving,
+        Idle,
+        Skill,
+    }
+    public enum WorldObject
+    {
+        Unknown,
+        Player,
+        Monster,
+    }
 }
