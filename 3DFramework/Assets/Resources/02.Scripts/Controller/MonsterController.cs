@@ -3,7 +3,6 @@ using UnityEngine.AI;
 
 public class MonsterController : BaseController
 {
-    Stat _stat;
 
     [SerializeField]
     float _scanRange = 10;
@@ -25,7 +24,7 @@ public class MonsterController : BaseController
     {
         Debug.Log("Monster Idle State");
 
-        GameObject player = GameObject.FindGameObjectWithTag("Player");
+        GameObject player = Managers.Game.GetPlayer();
 
         if (player == null) return;
         float distance = (player.transform.position - transform.position).magnitude;
@@ -77,18 +76,13 @@ public class MonsterController : BaseController
         }
     }
 
-    void OnHitEvent()
+    protected override void OnHitEvent()
     {
-        Debug.Log("OnHitEvent");
+        base.OnHitEvent();
 
-        if (_lockTarget != null)
-        {
             Stat targetStat = _lockTarget.GetComponent<Stat>();
-            Stat myStat = gameObject.GetComponent<Stat>();
-            int damage = Mathf.Max(0, myStat.Attack - targetStat.Defense);
-            Debug.Log(damage);
-            targetStat.Hp -= damage;
 
+            //연속공격
             if (targetStat.Hp > 0)
             {
                 float distance = (_lockTarget.transform.position - transform.position).magnitude;
@@ -103,10 +97,9 @@ public class MonsterController : BaseController
             }
             else
             {
-                Managers.Game.Despawn(targetStat.gameObject);
                 State = Define.State.Idle;
             }
-        }
+        
     }
 
     protected override void UpdateDie()

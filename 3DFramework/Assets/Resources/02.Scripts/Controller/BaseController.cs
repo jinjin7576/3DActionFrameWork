@@ -11,6 +11,7 @@ public abstract class BaseController : MonoBehaviour
     [SerializeField]
     protected Define.State _state = Define.State.Idle;
 
+    protected Stat _stat;
     public Define.WorldObject WorldObjectType { get; protected set; } = Define.WorldObject.Unknown;
 
     public Define.State State
@@ -70,4 +71,15 @@ public abstract class BaseController : MonoBehaviour
     protected virtual void UpdateMoving() { }
 
     protected virtual void UpdateDie() { }
+    protected virtual void OnHitEvent()
+    {
+        Debug.Log("OnHitEvent");
+
+        if (_lockTarget == null) return;
+        
+            Stat targetStat = _lockTarget.GetComponent<Stat>();
+
+            targetStat.OnAttackted(_stat);
+        
+    }
 }

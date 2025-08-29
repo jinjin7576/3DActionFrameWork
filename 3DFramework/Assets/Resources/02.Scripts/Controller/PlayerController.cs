@@ -4,11 +4,8 @@ using UnityEngine.AI;
 
 public class PlayerController : BaseController
 {
-    PlayerStat _stat;
-
     int _mask = (1 << (int)Define.Layer.Ground | 1 << (int)Define.Layer.Monster);
-
-    bool _skillStop = false;
+    private bool _skillStop = false;
 
     public override void Init()
     {
@@ -92,18 +89,10 @@ public class PlayerController : BaseController
             transform.rotation = Quaternion.Lerp(transform.rotation, quat, 20 * Time.deltaTime);
         }
     }
-    void OnHitEvent()
+    protected override void OnHitEvent()
     {
         Debug.Log("OnHitEvent");
-        if (_lockTarget != null)
-        {
-            Stat targetStat = _lockTarget.GetComponent<Stat>();
-            Stat myStat = gameObject.GetComponent<Stat>();
-            //음수로 떨어지면 공격했을때 힐이 될것. 그래서 음수로 떨어지면 0이 되도록 처리
-            int damage = Mathf.Max(0, myStat.Attack - targetStat.Defense);
-            Debug.Log(damage);
-            targetStat.Hp -= damage;
-        }
+        base.OnHitEvent();
 
         if (_skillStop)
         {
@@ -113,6 +102,7 @@ public class PlayerController : BaseController
         {
             State = Define.State.Skill;
         }
+        
     }
     protected override void UpdateMoving()
     {

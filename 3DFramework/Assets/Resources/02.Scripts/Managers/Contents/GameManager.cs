@@ -50,4 +50,5 @@ public class GameManager
         }
         Managers.Resource.Destroy(go);
     }
+    public GameObject GetPlayer() { return _player; }
 }
