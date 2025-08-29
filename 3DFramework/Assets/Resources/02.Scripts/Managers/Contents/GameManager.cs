@@ -1,12 +1,15 @@
 using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
+using System;
 
 public class GameManager
 {
     GameObject _player;
 
     HashSet<GameObject> _monster = new HashSet<GameObject>();
+
+    public Action<int> OnSpawnEvent; //int를 전달하는 액션
 
     public GameObject Spawn(Define.WorldObject type, string path, Transform parent = null)
     {
@@ -16,6 +19,10 @@ public class GameManager
         {
             case Define.WorldObject.Monster:
                 _monster.Add(go);
+                if (OnSpawnEvent != null)
+                {
+                    OnSpawnEvent.Invoke(1);
+                }
                 break;
             case Define.WorldObject.Player:
                 _player = go;
@@ -42,6 +49,7 @@ public class GameManager
                 if (_monster.Contains(go))
                 {
                     _monster.Remove(go);
+                    OnSpawnEvent?.Invoke(-1);
                 }
                 break;
             case Define.WorldObject.Player:

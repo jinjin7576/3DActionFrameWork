@@ -80,6 +80,5 @@ public abstract class BaseController : MonoBehaviour
             Stat targetStat = _lockTarget.GetComponent<Stat>();
 
             targetStat.OnAttackted(_stat);
-        
     }
 }
