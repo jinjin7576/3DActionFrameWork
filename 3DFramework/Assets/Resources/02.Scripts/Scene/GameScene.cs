@@ -19,7 +19,7 @@ public class GameScene : BaseScene
         //플레이어 생성
         GameObject player = Managers.Game.Spawn(Define.WorldObject.Player, "Player");
         //몬스터 생성
-        //Managers.Game.Spawn(Define.WorldObject.Monster, "Monster");
+        Managers.Game.Spawn(Define.WorldObject.Monster, "Monster");
 
         GameObject go = new GameObject { name = "SpawningPool" };
         SpawningPool pool = go.GetorAddComponent<SpawningPool>();
